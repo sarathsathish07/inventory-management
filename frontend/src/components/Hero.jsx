@@ -1,17 +1,44 @@
-import { Container, Card } from 'react-bootstrap';
-
+import React from "react";
+import { Container, Card, Button, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useGetProductsQuery } from "../slices/usersApiSlice";
+import { addItemToCart } from "../slices/cartSlice";
 
 const Hero = () => {
+  const { data: items = [], isLoading, isError } = useGetProductsQuery();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleAddToCart = (item) => {
+    dispatch(addItemToCart({ ...item, quantity: 1 }));
+    navigate("/cart");
+  };
+
   return (
-    <div className=' py-5'>
-      <Container className='d-flex justify-content-center'>
-        <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75'>
-          <h1 className='text-center mb-4'>MERN Authentication</h1>
-          <p className='text-center mb-4'>
-            Welcome to the Home page
-          </p>
-          
-        </Card>
+    <div className="py-5">
+      <Container>
+        <Row>
+          {isLoading && <p>Loading items...</p>}
+          {isError && <p>Failed to load items.</p>}
+          {items.map((item) => (
+            <Col lg={4} md={6} sm={12} key={item._id} className="mb-4">
+              <Card className="h-100">
+                <Card.Body>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Text>{item.description}</Card.Text>
+                  <Card.Text>Price: ${item.price}</Card.Text>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    Add to Cart
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
     </div>
   );

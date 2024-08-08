@@ -1,18 +1,17 @@
-import express from 'express';
-import { multerUploadUserProfile } from "../config/multerConfig.js";
-import { authUser,
-  registerUser,
+import express from "express";
+import {
+  loginUser,
   logoutUser,
-  getUserProfile,
-  updateUserProfile 
-} from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
-const router = express.Router()
+  getProducts,
+  createBill,
+  updateItemQuantity,
+} from "../controllers/userController.js";
+const router = express.Router();
 
+router.post("/auth", loginUser);
+router.post("/logout", logoutUser);
+router.get("/products", getProducts);
+router.post("/bills", createBill);
+router.put("/items/:id", updateItemQuantity);
 
-router.post('/',registerUser)
-router.post('/auth',authUser)
-router.post('/logout',logoutUser)
-router.route('/profile').get(protect,getUserProfile).put(multerUploadUserProfile.single('profileImageName'),protect,updateUserProfile);
-
-export default router
+export default router;

@@ -3,28 +3,25 @@ import FormContainer from "../../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useAdminLoginMutation } from "../../slices/adminApiSlice.js";
-import { useDispatch ,useSelector} from "react-redux";
-import { setCredentials } from "../../slices/adminAuthSlice.js";                                                                                                                                                                                                                                             
+import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "../../slices/adminAuthSlice.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
-
 function AdminLoginScreen() {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useAdminLoginMutation();
-  const {adminInfo}=useSelector((state)=>state.adminAuth)
+  const { adminInfo } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
-    if(adminInfo){
-      navigate('/admin/get-user')
+    if (adminInfo) {
+      navigate("/admin");
     }
-  },[adminInfo,navigate]);
+  }, [adminInfo, navigate]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
