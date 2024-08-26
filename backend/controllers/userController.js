@@ -1,5 +1,3 @@
-import expressAsyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 import Item from "../models/itemsScema.js";
 import Bill from "../models/billsSchema.js";
 
@@ -7,27 +5,22 @@ const userCredentials = {
   email: "sarath@gmail.com",
   password: "12345",
 };
-const loginUser = expressAsyncHandler(async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   if (
     email === userCredentials.email &&
     password === userCredentials.password
   ) {
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      user = await User.create({ email });
-    }
 
     res.status(201).json({
-      email: user.email,
+      email: userCredentials.email,
     });
   } else {
     res.status(401);
     throw new Error("Invalid Credentials");
   }
-});
+};
 
 const getProducts = async (req, res) => {
   try {
@@ -80,8 +73,8 @@ const updateItemQuantity = async (req, res) => {
   }
 };
 
-const logoutUser = expressAsyncHandler(async (req, res) => {
+const logoutUser = async (req, res) => {
   res.status(200).json({ message: "User logged out" });
-});
+};
 
 export { loginUser, logoutUser, getProducts, createBill, updateItemQuantity };
