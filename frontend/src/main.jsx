@@ -19,6 +19,7 @@ import SalesBill from "./screens/adminScreens/SalesBillScreen.jsx";
 import Cart from "./screens/CartScreen.jsx";
 import store from "./store.js";
 import { Provider } from "react-redux";
+import NotFoundScreen from "./screens/NotFoundScreen.jsx"; // Import NotFoundScreen
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,8 @@ const router = createBrowserRouter(
         <Route path="sales-bill" element={<SalesBill />} />
       </Route>
       <Route path="/admin/login" element={<AdminLoginScreen />} />
+
+      <Route path="*" element={<NotFoundScreen />} />
     </Route>
   )
 );

@@ -40,7 +40,6 @@ const getProducts = async (req, res) => {
 
 const createBill = async (req, res) => {
   const { user, items, totalPrice } = req.body;
-  console.log(req.body);
 
   try {
     const newBill = await Bill.create({

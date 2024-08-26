@@ -27,7 +27,6 @@ const Cart = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const handleIncreaseQuantity = (item) => {
-    console.log("item", item);
 
     if (item.quantity < item.availableStock) {
       dispatch(
