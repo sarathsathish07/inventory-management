@@ -1,5 +1,4 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 import Item from "../models/itemsScema.js";
 import Bill from "../models/billsSchema.js";
 
