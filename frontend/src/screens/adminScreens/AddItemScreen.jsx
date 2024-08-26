@@ -21,6 +21,7 @@ const AddItem = () => {
     supplier: "",
   });
 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [addItem, { isLoading }] = useAddItemMutation();
 
@@ -29,10 +30,50 @@ const AddItem = () => {
       ...itemDetails,
       [e.target.name]: e.target.value,
     });
+    setErrors({ ...errors, [e.target.name]: "" }); 
+  };
+
+  const validateForm = () => {
+    let formIsValid = true;
+    let errors = {};
+
+    if (!itemDetails.name.trim()) {
+      formIsValid = false;
+      errors["name"] = "Name is required";
+    }
+
+    if (!itemDetails.description.trim()) {
+      formIsValid = false;
+      errors["description"] = "Description is required";
+    }
+
+    if (itemDetails.availableStock <= 0) {
+      formIsValid = false;
+      errors["availableStock"] = "Quantity must be greater than 0";
+    }
+
+    if (itemDetails.price <= 0) {
+      formIsValid = false;
+      errors["price"] = "Price must be greater than 0";
+    }
+
+    if (!itemDetails.category.trim()) {
+      formIsValid = false;
+      errors["category"] = "Category is required";
+    }
+
+    setErrors(errors);
+    return formIsValid;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the validation errors.");
+      return;
+    }
+
     try {
       await addItem(itemDetails).unwrap();
       toast.success("Item added successfully!");
@@ -69,7 +110,7 @@ const AddItem = () => {
           <ListGroup.Item
             action
             onClick={handleViewSalesBills}
-            className="text-white bg-dark "
+            className="text-white bg-dark"
           >
             Sales Bill
           </ListGroup.Item>
@@ -88,8 +129,12 @@ const AddItem = () => {
                   name="name"
                   value={itemDetails.name}
                   onChange={handleChange}
+                  isInvalid={!!errors.name}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.name}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Description</Form.Label>
@@ -98,7 +143,12 @@ const AddItem = () => {
                   name="description"
                   value={itemDetails.description}
                   onChange={handleChange}
+                  isInvalid={!!errors.description}
+                  required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Quantity</Form.Label>
@@ -107,8 +157,12 @@ const AddItem = () => {
                   name="availableStock"
                   value={itemDetails.availableStock}
                   onChange={handleChange}
+                  isInvalid={!!errors.availableStock}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.availableStock}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Price</Form.Label>
@@ -117,8 +171,12 @@ const AddItem = () => {
                   name="price"
                   value={itemDetails.price}
                   onChange={handleChange}
+                  isInvalid={!!errors.price}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.price}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Category</Form.Label>
@@ -127,8 +185,12 @@ const AddItem = () => {
                   name="category"
                   value={itemDetails.category}
                   onChange={handleChange}
+                  isInvalid={!!errors.category}
                   required
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.category}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Supplier</Form.Label>
